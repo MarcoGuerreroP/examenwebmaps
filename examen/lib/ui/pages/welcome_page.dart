@@ -1,4 +1,4 @@
-// import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 
@@ -11,8 +11,8 @@ class _WelcomePageState extends State<WelcomePage> {
   void initState() {
     super.initState();
 
-    // Timer(Duration(seconds: 5),
-    //     () => Navigator.pushReplacementNamed(context, '/form'));
+    Timer(Duration(seconds: 5),
+        () => Navigator.pushReplacementNamed(context, '/form'));
   }
 
   @override
