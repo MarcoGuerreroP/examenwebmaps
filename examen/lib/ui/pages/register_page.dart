@@ -160,8 +160,8 @@ class _RegisterPageState extends State<RegisterPage> {
         form.save();
         var user =
             new User(_emailUserController.text, _passwordController.text, null);
-        var db = new DatabaseHelper();
-        db.saveUser(user);
+
+        DatabaseHelper.database.saveUser(user);
         _isLoading = false;
         Navigator.of(context).pushNamed("/login");
         _showSnackBar("Created successful", Colors.green);

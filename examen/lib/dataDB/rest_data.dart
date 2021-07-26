@@ -12,13 +12,13 @@ class RestData {
     String flagLogged = "logged";
 
     var user = new User(username, password, null);
-    var db = new DatabaseHelper();
+    // var db = new DatabaseHelper();
     var userRetorno = new User(
       null,
       null,
       null,
     );
-    userRetorno = await db.selectUser(user);
+    userRetorno = await DatabaseHelper.database.selectUser(user);
     if (userRetorno != null) {
       flagLogged = "logged";
       return new Future.value(new User(username, password, flagLogged));
