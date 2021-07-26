@@ -2,7 +2,7 @@ import 'package:examen/dataDB/database_helper.dart';
 
 import 'package:examen/models/peoples.dart';
 import 'package:examen/provider/auth.dart';
-import 'package:examen/utils/popoptionmenui.dart';
+
 import 'package:flutter/material.dart';
 
 class FormPage extends StatefulWidget {
@@ -85,7 +85,7 @@ class _FormPageState extends State<FormPage> {
                       _signOut();
                       Navigator.pushReplacementNamed(context, '/login');
                     }),
-                PopOptionMenu(),
+                // PopOptionMenu(),
               ],
             )
           ],
