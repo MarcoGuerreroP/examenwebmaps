@@ -170,6 +170,14 @@ class _FormPageState extends State<FormPage> {
               // ...
             },
           ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: const Text('Ajustes'),
+            onTap: () {
+              // Update the state of the app.
+              // ...
+            },
+          ),
         ],
       ),
     );
