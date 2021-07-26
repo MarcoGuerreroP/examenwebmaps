@@ -1,15 +1,33 @@
 import 'package:examen/dataDB/database_helper.dart';
-// ignore: unused_import
+
 import 'package:examen/models/peoples.dart';
+import 'package:examen/provider/auth.dart';
 import 'package:flutter/material.dart';
 
 class FormPage extends StatefulWidget {
   @override
   _FormPageState createState() => _FormPageState();
+  FormPage({this.authStateListener, this.authStateProvider});
+  final AuthStateListener authStateListener;
+  final AuthStateProvider authStateProvider;
 }
 
 class _FormPageState extends State<FormPage> {
+  void _signOut() async {
+    try {
+      widget.authStateProvider.notify(AuthState.LOGGED_OUT);
+
+      widget.authStateListener.onAuthStateChanged(AuthState.LOGGED_OUT);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   final _sacaffoldKey = new GlobalKey<ScaffoldState>();
+
+  List allPeoples = [];
+  List items = [];
+  TextEditingController textSearch = TextEditingController();
 
   @override
   void didUpdateWidget(FormPage oldWidget) {
@@ -18,11 +36,60 @@ class _FormPageState extends State<FormPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    DatabaseHelper.database.getAllPeoples().then((peoples) {
+      setState(() {
+        allPeoples = peoples;
+        items = allPeoples;
+      });
+    });
+  }
+
+  void filterSearch(String querry) async {
+    var searchList = allPeoples;
+    if (querry.isNotEmpty) {
+      var listData = [];
+      searchList.forEach((item) {
+        var peoples = Peoples.map(item);
+        if (peoples.nameuser.toLowerCase().contains(querry.toLowerCase())) {
+          listData.add(item);
+        }
+      });
+      setState(() {
+        items = [];
+        items.addAll(listData);
+      });
+      return;
+    } else {
+      setState(() {
+        items = [];
+        items = allPeoples;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         key: _sacaffoldKey,
         appBar: AppBar(
           title: Text("List of regist"),
+          actions: [
+            Row(
+              children: [
+                IconButton(
+                    icon: Icon(Icons.logout),
+                    onPressed: () {
+                      _signOut();
+                      Navigator.pushReplacementNamed(context, '/login');
+                    }),
+                IconButton(
+                    icon: Icon(Icons.arrow_circle_down_outlined),
+                    onPressed: () {}),
+              ],
+            )
+          ],
         ),
         drawer: _drawerPersonalize(),
         floatingActionButton: FloatingActionButton(
@@ -30,16 +97,29 @@ class _FormPageState extends State<FormPage> {
             onPressed: () {
               Navigator.pushReplacementNamed(context, '/addpeople');
             }),
-        body: FutureBuilder(
-          future: DatabaseHelper.database.getAllPeoples(),
-          builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: TextField(
+                  controller: textSearch,
+                  onChanged: (value) {
+                    setState(() {
+                      filterSearch(value);
+                    });
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "enter search",
+                      prefixIcon: Icon(Icons.search))),
+            ),
+            Expanded(
+              child: ListView.builder(
                   shrinkWrap: true,
                   physics: BouncingScrollPhysics(),
-                  itemCount: snapshot.data.length,
+                  itemCount: items.length,
                   itemBuilder: (context, index) {
-                    Peoples model = snapshot.data[index];
+                    Peoples model = (items[index]);
                     return ListTile(
                       isThreeLine: true,
                       title: Text(
@@ -65,11 +145,9 @@ class _FormPageState extends State<FormPage> {
                       ),
                       leading: CircleAvatar(child: Text(model.id.toString())),
                     );
-                  });
-            } else {
-              return CircularProgressIndicator(backgroundColor: Colors.green);
-            }
-          },
+                  }),
+            )
+          ],
         ));
   }
 

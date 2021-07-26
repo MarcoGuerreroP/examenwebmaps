@@ -147,4 +147,10 @@ class DatabaseHelper {
       return null;
     }
   }
+
+  Future<bool> isLoggedIn() async {
+    var dbClient = await db;
+    var res = await dbClient.query("User");
+    return res.length > 0 ? true : false;
+  }
 }
