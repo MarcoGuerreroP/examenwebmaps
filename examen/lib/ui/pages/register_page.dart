@@ -158,8 +158,8 @@ class _RegisterPageState extends State<RegisterPage> {
       setState(() {
         _isLoading = true;
         form.save();
-        var user =
-            new User(_emailUserController.text, _passwordController.text, null);
+        var user = new User(_emailUserController.text.trim(),
+            _passwordController.text.trim(), null);
 
         DatabaseHelper.database.saveUser(user);
         _isLoading = false;

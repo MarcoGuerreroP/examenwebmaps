@@ -33,27 +33,38 @@ class _AddPeoplePageState extends State<AddPeoplePage> {
     });
   }
 
+  void _onback() {
+    Navigator.pushNamed(context, '/form');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text("Add People"),
-      ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            SizedBox(height: 2.0),
-            _inputUser(),
-            SizedBox(height: 2.0),
-            _inputCountry(),
-            SizedBox(height: 2.0),
-            _inputlabelState(),
-            SizedBox(height: 2.0),
-            _inputGener(),
-            _buttonAdd()
-          ],
+    return WillPopScope(
+      onWillPop: () {
+        _onback();
+        return Future.value(false);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text("Add People"),
+        ),
+        body: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              SizedBox(height: 2.0),
+              _inputUser(),
+              SizedBox(height: 2.0),
+              _inputCountry(),
+              SizedBox(height: 2.0),
+              _inputlabelState(),
+              SizedBox(height: 2.0),
+              _inputGener(),
+              _buttonAdd()
+            ],
+          ),
         ),
       ),
     );

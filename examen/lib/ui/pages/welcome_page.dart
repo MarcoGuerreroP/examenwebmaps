@@ -90,7 +90,7 @@ class _WelcomePageState extends State<WelcomePage> {
 _textWelcome() {
   return Center(
     child: Container(
-      color: Colors.grey,
+      color: Colors.white,
       width: 100,
       height: 200,
       child: Text("Welcome", style: TextStyle(fontSize: 20)),
