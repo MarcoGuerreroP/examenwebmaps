@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> implements LoginValidated {
       setState(() {
         _isLoading = false;
         form.save();
-        _presenter.doLogin(_emailUserController.text, _passwordController.text);
+        _presenter.doLogin(_emailUserController.text.trim(), _passwordController.text.trim());
       });
     }
   }
